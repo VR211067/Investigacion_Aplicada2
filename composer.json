@@ -1,0 +1,24 @@
+{
+    "name": "nemes/ia2_reactphp",
+    "autoload": {
+        "psr-4": {
+            "Nemes\\Ia2Reactphp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "VR211067",
+            "email": "nemval3001@gmail.com"
+        }
+    ],
+    "require": {
+        "react/http": "^1.11",
+        "react/mysql": "^0.6.0",
+        "react/filesystem": "^0.1.2"
+    },
+    "config": {
+        "allow-plugins": {
+            "wyrihaximus/composer-update-bin-autoload-path": true
+        }
+    }
+}

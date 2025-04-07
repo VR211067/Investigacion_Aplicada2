@@ -1,0 +1,20 @@
+name: Continuous Integration
+on:
+  pull_request:
+jobs:
+  qa:
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [7.4, "8.0", 8.1, 8.2, 8.3]
+        composer: [lowest, current, highest]
+        qa: [lint, unit, infection, composer-require-checker, composer-unused, backward-compatibility-check]
+    runs-on: ubuntu-latest
+    container:
+      image: wyrihaximusnet/php:${{ matrix.php }}-nts-alpine-dev-root
+    steps:
+      - uses: actions/checkout@v4
+      - run: git config --global --add safe.directory $GITHUB_WORKSPACE # Do this ourself because `actions/checkout@v4 doesn't succeed in doing this
+      - name: Installation Dependencies
+        run: composer install --ansi --no-progress --no-interaction --prefer-dist -o
+      - run: make ${{ matrix.qa }}

@@ -1,0 +1,144 @@
+/* Fondo galaxia con animación de estrellas más visibles */
+body {
+    background: linear-gradient(135deg, #1a0c31, #641fa6);
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+    opacity: 0.25; /* más opaco para que se noten más */
+    z-index: -1;
+    animation: moveStars 80s linear infinite;
+}
+
+@keyframes moveStars {
+    from { background-position: 0 0; }
+    to { background-position: 1000px 1000px; }
+}
+
+/* Contenedor principal */
+.container {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 0 25px rgba(161, 127, 194, 0.6);
+    margin-top: 50px;
+}
+
+/* Títulos principales */
+h1, h2 {
+    color: #a17fc2;
+    text-shadow: 0 0 10px #a17fc2, 0 0 20px #50648f;
+    text-align: center;
+}
+
+/* Botón galáctico */
+.btn-primary {
+    background: linear-gradient(135deg, #641fa6, #8c6aad);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 30px;
+    box-shadow: 0 0 15px rgba(100, 31, 166, 0.6);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #8c6aad, #50648f);
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(161, 127, 194, 0.9);
+}
+
+/* Tarjetas de contenido */
+.card {
+    background-color: rgba(30, 30, 60, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(100, 31, 166, 0.5);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 30px rgba(161, 127, 194, 0.8);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px 15px 0 0;
+}
+
+/* Formulario */
+form {
+    background-color: rgba(0, 0, 0, 0.85);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(141, 106, 173, 0.5);
+}
+
+form .form-control {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+form .form-control:focus {
+    border-color: #a17fc2;
+    box-shadow: 0 0 10px #a17fc2;
+}
+
+/* Enlaces */
+a {
+    color: #a17fc2;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 5px #a17fc2;
+}
+
+/* Footer */
+.footer {
+    margin-top: 50px;
+    text-align: center;
+    padding: 20px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Margen para filas */
+.row {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.navbar {
+    background: linear-gradient(to right, #1a0c31, #641fa6);
+    box-shadow: 0 0 20px rgba(100, 31, 166, 0.6);
+}
+
+.navbar-brand, .nav-link {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    color: #a17fc2 !important;
+}
+

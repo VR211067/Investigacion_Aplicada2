@@ -1,0 +1,30 @@
+#!/usr/bin/php
+<?php declare(strict_types=1);
+
+use WyriHaximus\React\ChildProcess\Messenger\ChildProcess\Factory;
+
+/**
+ * Require Composer's autoloader
+ */
+(function() {
+    foreach ([
+        '%s',
+        dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'vendor.php',
+        dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . 'autoload.php',
+    ] as $path) {
+        if (file_exists($path)) {
+            require_once $path;
+
+            return;
+        }
+    }
+})();
+
+(function(array $argv): void {
+    /**
+     * Create and boot up the child process
+     */
+    exit((function (array $argv): int {
+        return Factory::boot($argv[1] ?? '');
+    })($argv));
+})($argv);
