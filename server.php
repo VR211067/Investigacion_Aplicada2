@@ -1,16 +1,16 @@
 <?php
 require 'vendor/autoload.php';
-
-use React\Http\HttpServer;
-use React\EventLoop\Loop;
-use React\Socket\SocketServer;
-use Psr\Http\Message\ServerRequestInterface;
-use React\MySQL\Factory;
-use React\Promise\Promise;
+//Librerias
+use React\Http\HttpServer; //creacion servidor asincrono
+use React\EventLoop\Loop; //bucle de eventos principal
+use React\Socket\SocketServer; // escuchar conexiones de puertos especificos
+use Psr\Http\Message\ServerRequestInterface; //estandar de solicitud http
+use React\MySQL\Factory; //conectar a base de datos de forma asincrona
+use React\Promise\Promise; // implementa el concepto de promesas
 
 $loop = Loop::get();
-$factory = new Factory($loop);
-$connection = $factory->createLazyConnection('root:@127.0.0.1:3306/reactphp_db');
+$factory = new Factory($loop);//no bloquear el flujo si la db se tarda
+$connection = $factory->createLazyConnection('root:@127.0.0.1:3306/reactphp_db');//conectarse solo si es necesario
 
 // Crear el servidor HTTP
 $server = new HttpServer(function (ServerRequestInterface $request) use ($connection) {
@@ -24,6 +24,8 @@ $server = new HttpServer(function (ServerRequestInterface $request) use ($connec
                 return serveStaticFile(__DIR__ . '/public/index.html', 'text/html');
             case '/contact':
                 return serveStaticFile(__DIR__ . '/public/contact.html', 'text/html');
+            case '/productos':
+                return serveStaticFile(__DIR__ . '/public/productos.html', 'text/html');
             case '/style.css':
                 return serveStaticFile(__DIR__ . '/public/style.css', 'text/css');
             case '/img/mision.jpg':  // Servir imagen de logo
@@ -112,7 +114,7 @@ function updateProduct($request, $connection) {
     return $connection->query('UPDATE productos SET nombre = ?, precio = ? WHERE id = ?', [$data['nombre'], $data['precio'], $data['id']])
         ->then(fn() => new React\Http\Message\Response(200, ['Content-Type' => 'text/plain'], 'Producto actualizado'));
 }
-// Función para manejar el formulario de contacto y agregar los datos a la base de datos
+//manejo de formulario
 function ContactForm($request, $connection) {
     $data = json_decode($request->getBody()->getContents(), true);
 
@@ -121,23 +123,29 @@ function ContactForm($request, $connection) {
         return new React\Http\Message\Response(400, ['Content-Type' => 'text/plain'], 'Todos los campos son obligatorios');
     }
 
+    // Escapamos los datos para evitar XSS
+    $nombre = htmlspecialchars($data['nombre'], ENT_QUOTES, 'UTF-8');
+    $email = htmlspecialchars($data['email'], ENT_QUOTES, 'UTF-8');
+    $mensaje = htmlspecialchars($data['mensaje'], ENT_QUOTES, 'UTF-8');
+
     // Intentamos insertar los datos en la base de datos
     return $connection->query('INSERT INTO mensajes_contacto (nombre, email, mensaje) VALUES (?, ?, ?)', [
-        $data['nombre'],
-        $data['email'],
-        $data['mensaje']
+        $nombre,
+        $email,
+        $mensaje
     ])
     ->then(function () {
         // Si la inserción es exitosa, devolvemos un mensaje de éxito
         return new React\Http\Message\Response(200, ['Content-Type' => 'text/plain'], 'Mensaje recibido. Nos pondremos en contacto contigo pronto.');
     })
-    ->otherwise(function (Exception $e) {
+    ->otherwise(function (Exception $e) { 
         // Capturamos cualquier error y lo mostramos
         $errorMessage = $e->getMessage();
         error_log('Error al guardar el mensaje: ' . $errorMessage); // Escribe el error en el log
         return new React\Http\Message\Response(500, ['Content-Type' => 'text/plain'], 'Error al guardar el mensaje en la base de datos: ' . $errorMessage);
     });
 }
+
 
 
 

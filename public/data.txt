@@ -1,2 +1,2 @@
-Este es un archivo de prueba para lectura asíncrona.
+Este es un archivo de prueba para lectura asincrona.
 Si puedes ver este texto en el navegador, significa que ReactPHP está sirviendo archivos correctamente.
